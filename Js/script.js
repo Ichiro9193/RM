@@ -70,7 +70,7 @@ function getURLParam(name) {
 function showDedicationText() { //seguidores
   let text = getURLParam('text');
   if (!text) {
-    text = `A la dueña de mi amor JB:\n\nEres la más hermosa casualidad de mi vida.\n\nSueño con compartir la vida contigo, sin pausas ni distancias.\n\nTe amo con calma, con certeza.\n\nMi amor ya es todo tuyo. y siempre lo será.\n\n Te amo preciosa.`;  } else {
+    text = `A la dueña de mi amor AM:\n\nEres la más hermosa casualidad de mi vida.\n\nTe amo con calma, con certeza.\n\nMi amor ya es todo tuyo. y siempre lo será.\n\n Te amo preciosa.`;  } else {
     text = decodeURIComponent(text).replace(/\\n/g, '\n');
   }
   const container = document.getElementById('dedication-text');
@@ -160,8 +160,8 @@ function showCountdown() {
     let eventSeconds = Math.max(0, Math.floor((eventDiff / 1000) % 60));
 
     container.innerHTML =
-      `Llevamos de conocernos "cuando seamos novios lo edito": <b>${days}</b> días<br>` +
-      `Nuestro aniversario "pendiente hasta que seas mi novia": <b>${eventDays}d ${eventHours}h ${eventMinutes}m ${eventSeconds}s</b>`;
+      `Llevamos de conocernos "01/01/2019": <b>${days}</b> días<br>` +
+      `Nuestro aniversario "": <b>${eventDays}d ${eventHours}h ${eventMinutes}m ${eventSeconds}s</b>`;
     container.classList.add('visible');
   }
   update();
