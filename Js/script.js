@@ -9,7 +9,8 @@ fetch('Img/treelove.svg')
     container.innerHTML = svgText;
     const svg = container.querySelector('svg');
     if (!svg) return;
-
+$('#extramessage').text(decodeURIComponent(param[1].split('+').join(' '))).html();
+    
     // Animación de "dibujo" para todos los paths
     const allPaths = Array.from(svg.querySelectorAll('path'));
     allPaths.forEach(path => {
