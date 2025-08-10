@@ -1,4 +1,4 @@
-//© Zero - Código libre no comercial
+//© RM - Código libre no comercial
 
 
 // Cargar el SVG y animar los corazones
@@ -9,8 +9,7 @@ fetch('Img/treelove.svg')
     container.innerHTML = svgText;
     const svg = container.querySelector('svg');
     if (!svg) return;
-$('#extramessage').text(decodeURIComponent(param[1].split('+').join(' '))).html();
-    
+
     // Animación de "dibujo" para todos los paths
     const allPaths = Array.from(svg.querySelectorAll('path'));
     allPaths.forEach(path => {
@@ -71,7 +70,7 @@ function getURLParam(name) {
 function showDedicationText() { //seguidores
   let text = getURLParam('text');
   if (!text) {
-    text = `A la dueña de mi amor AM:\n\nEres la más hermosa casualidad de mi vida.\n\nTe amo con calma, con certeza.\n\nMi amor ya es todo tuyo. y siempre lo será.\n\n Te amo preciosa.`;  } else {
+    text = `Para el amor de mi vida:\n\nDesde el primer momento supe que eras tú. Tu sonrisa, tu voz, tu forma de ser… todo en ti me hace sentir en casa.\n\nGracias por acompañarme en cada paso, por entenderme incluso en silencio, y por llenar mis días de amor.\n\nTe amo más de lo que las palabras pueden expresar.`;  } else {
     text = decodeURIComponent(text).replace(/\\n/g, '\n');
   }
   const container = document.getElementById('dedication-text');
@@ -102,7 +101,7 @@ function showSignature() {
     dedication.appendChild(signature);
   }
   let firma = getURLParam('firma');
-  signature.textContent = firma ? decodeURIComponent(firma) : "Con todo mi amor, RM";
+  signature.textContent = firma ? decodeURIComponent(firma) : "Con amor, RM";
   signature.classList.add('visible');
 }
 
@@ -247,4 +246,3 @@ function playBackgroundMusic() {
 window.addEventListener('DOMContentLoaded', () => {
   playBackgroundMusic();
 });
-
