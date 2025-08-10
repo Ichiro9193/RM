@@ -147,8 +147,8 @@ function showCountdown() {
   const container = document.getElementById('countdown');
   let startParam = getURLParam('start');
   let eventParam = getURLParam('event');
-  let startDate = startParam ? new Date(startParam + 'T00:00:00') : new Date('2018-12-01T00:00:00'); 
-  let eventDate = eventParam ? new Date(eventParam + 'T00:00:00') : new Date('2025-05-25T00:00:00');
+  let startDate = startParam ? new Date(startParam + 'T00:00:00') : new Date('2024-08-03T00:00:00'); 
+  let eventDate = eventParam ? new Date(eventParam + 'T00:00:00') : new Date('2025-08-03T00:00:00');
 
   function update() {
     const now = new Date();
@@ -161,8 +161,8 @@ function showCountdown() {
     let eventSeconds = Math.max(0, Math.floor((eventDiff / 1000) % 60));
 
     container.innerHTML =
-      `Llevamos de conocernos "01/01/2019": <b>${days}</b> días<br>` +
-      `Nuestro aniversario "01/01/2019": <b>${eventDays}d ${eventHours}h ${eventMinutes}m ${eventSeconds}s</b>`;
+      `Llevamos juntos: <b>${days}</b> días<br>` +
+      `Nuestro aniversario: <b>${eventDays}d ${eventHours}h ${eventMinutes}m ${eventSeconds}s</b>`;
     container.classList.add('visible');
   }
   update();
@@ -173,6 +173,39 @@ function showCountdown() {
 function playBackgroundMusic() {
   const audio = document.getElementById('bg-music');
   if (!audio) return;
+
+  // --- Opción archivo local por parámetro 'musica' ---
+  let musicaParam = getURLParam('musica');
+  if (musicaParam) {
+    // Decodifica y previene rutas maliciosas
+    musicaParam = decodeURIComponent(musicaParam).replace(/[^\w\d .\-]/g, '');
+    audio.src = 'Music/' + musicaParam;
+  }
+
+  // --- Opción YouTube (solo mensaje de ayuda) ---
+  let youtubeParam = getURLParam('youtube');
+  if (youtubeParam) {
+    // Muestra mensaje de ayuda para descargar el audio
+    let helpMsg = document.getElementById('yt-help-msg');
+    if (!helpMsg) {
+      helpMsg = document.createElement('div');
+      helpMsg.id = 'yt-help-msg';
+      helpMsg.style.position = 'fixed';
+      helpMsg.style.right = '18px';
+      helpMsg.style.bottom = '180px';
+      helpMsg.style.background = 'rgba(255,255,255,0.95)';
+      helpMsg.style.color = '#e60026';
+      helpMsg.style.padding = '10px 16px';
+      helpMsg.style.borderRadius = '12px';
+      helpMsg.style.boxShadow = '0 2px 8px #e6002633';
+      helpMsg.style.fontSize = '1.05em';
+      helpMsg.style.zIndex = 100;
+      helpMsg.innerHTML = 'Para usar música de YouTube, descarga el audio (por ejemplo, usando y2mate, 4K Video Downloader, etc.), colócalo en la carpeta <b>Music</b> y usa la URL así:<br><br><code>?musica=nombre.mp3</code>';
+      document.body.appendChild(helpMsg);
+      setTimeout(() => { if(helpMsg) helpMsg.remove(); }, 15000);
+    }
+  }
+
   let btn = document.getElementById('music-btn');
   if (!btn) {
     btn = document.createElement('button');
@@ -214,3 +247,4 @@ function playBackgroundMusic() {
 window.addEventListener('DOMContentLoaded', () => {
   playBackgroundMusic();
 });
+
