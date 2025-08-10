@@ -1,4 +1,5 @@
-//© RM - Código libre no comercial
+//© Zero - Código libre no comercial
+
 
 // Cargar el SVG y animar los corazones
 fetch('Img/treelove.svg')
@@ -9,6 +10,7 @@ fetch('Img/treelove.svg')
     const svg = container.querySelector('svg');
     if (!svg) return;
 
+    // Animación de "dibujo" para todos los paths
     const allPaths = Array.from(svg.querySelectorAll('path'));
     allPaths.forEach(path => {
       path.style.stroke = '#222';
@@ -20,9 +22,10 @@ fetch('Img/treelove.svg')
       path.style.transition = 'none';
     });
 
+    // Forzar reflow y luego animar
     setTimeout(() => {
       allPaths.forEach((path, i) => {
-        path.style.transition = stroke-dashoffset 1.2s cubic-bezier(.77,0,.18,1) ${i * 0.08}s, fill-opacity 0.5s ${0.9 + i * 0.08}s;
+        path.style.transition = `stroke-dashoffset 1.2s cubic-bezier(.77,0,.18,1) ${i * 0.08}s, fill-opacity 0.5s ${0.9 + i * 0.08}s`;
         path.style.strokeDashoffset = 0;
         setTimeout(() => {
           path.style.fillOpacity = '1';
@@ -31,17 +34,24 @@ fetch('Img/treelove.svg')
         }, 1200 + i * 80);
       });
 
+      // Después de la animación de dibujo, mueve y agranda el SVG
       const totalDuration = 1200 + (allPaths.length - 1) * 80 + 500;
       setTimeout(() => {
         svg.classList.add('move-and-scale');
+        // Mostrar texto con efecto typing
         setTimeout(() => {
           showDedicationText();
+          // Mostrar petalos flotando
           startFloatingObjects();
+          // Mostrar cuenta regresiva
+          showCountdown();
+          // Iniciar música de fondo
           playBackgroundMusic();
-        }, 1200);
+        }, 1200); //Tiempo para agrandar el SVG
       }, totalDuration);
     }, 50);
 
+    // Selecciona los corazones (formas rojas)
     const heartPaths = allPaths.filter(el => {
       const style = el.getAttribute('style') || '';
       return style.includes('#FC6F58') || style.includes('#C1321F');
@@ -49,26 +59,18 @@ fetch('Img/treelove.svg')
     heartPaths.forEach(path => {
       path.classList.add('animated-heart');
     });
-  })
-  .catch(err => {
-    console.warn("⚠ No se pudo cargar el SVG:", err);
-    showDedicationText();
-    startFloatingObjects();
   });
 
-// --- FUNCIONES ---
-
+// Efecto máquina de escribir para el texto de dedicatoria (seguidores)
 function getURLParam(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
 
-// Texto de dedicatoria
-function showDedicationText() {
+function showDedicationText() { //seguidores
   let text = getURLParam('text');
   if (!text) {
-    text = A la dueña de mi amor AM:\n\nEres la más hermosa casualidad de mi vida.\n\nTe amo con calma, con certeza.\n\nMi amor ya es todo tuyo y siempre lo será.\n\n Te amo preciosa.;
-  } else {
+    text = `A la dueña de mi amor AM:\n\nEres la más hermosa casualidad de mi vida.\n\nTe amo con calma, con certeza.\n\nMi amor ya es todo tuyo. y siempre lo será.\n\n Te amo preciosa.`;  } else {
     text = decodeURIComponent(text).replace(/\\n/g, '\n');
   }
   const container = document.getElementById('dedication-text');
@@ -80,14 +82,16 @@ function showDedicationText() {
       i++;
       setTimeout(type, text[i - 2] === '\n' ? 350 : 45);
     } else {
+      // Al terminar el typing, mostrar la firma animada
       setTimeout(showSignature, 600);
     }
   }
   type();
 }
 
-// Firma
+// Firma manuscrita animada
 function showSignature() {
+  // Cambia para buscar la firma dentro del contenedor de dedicatoria
   const dedication = document.getElementById('dedication-text');
   let signature = dedication.querySelector('#signature');
   if (!signature) {
@@ -101,81 +105,70 @@ function showSignature() {
   signature.classList.add('visible');
 }
 
-// Pétalos flotantes
+
+
+// Controlador de objetos flotantes
 function startFloatingObjects() {
   const container = document.getElementById('floating-objects');
   let count = 0;
   function spawn() {
     let el = document.createElement('div');
     el.className = 'floating-petal';
-    el.style.left = ${Math.random() * 90 + 2}%;
-    el.style.top = ${100 + Math.random() * 10}%;
+    // Posición inicial
+    el.style.left = `${Math.random() * 90 + 2}%`;
+    el.style.top = `${100 + Math.random() * 10}%`;
     el.style.opacity = 0.7 + Math.random() * 0.3;
     container.appendChild(el);
 
+    // Animación flotante
     const duration = 6000 + Math.random() * 4000;
     const drift = (Math.random() - 0.5) * 60;
     setTimeout(() => {
-      el.style.transition = transform ${duration}ms linear, opacity 1.2s;
-      el.style.transform = translate(${drift}px, -110vh) scale(${0.8 + Math.random() * 0.6}) rotate(${Math.random() * 360}deg);
+      el.style.transition = `transform ${duration}ms linear, opacity 1.2s`;
+      el.style.transform = `translate(${drift}px, -110vh) scale(${0.8 + Math.random() * 0.6}) rotate(${Math.random() * 360}deg)`;
       el.style.opacity = 0.2;
     }, 30);
 
+    // Eliminar después de animar
     setTimeout(() => {
       if (el.parentNode) el.parentNode.removeChild(el);
     }, duration + 2000);
 
+    // Generar más objetos
     if (count++ < 32) setTimeout(spawn, 350 + Math.random() * 500);
     else setTimeout(spawn, 1200 + Math.random() * 1200);
   }
   spawn();
 }
 
-// Cuenta regresiva SIEMPRE ACTIVA y con ajuste automático de año
+// Cuenta regresiva o fecha especial
 function showCountdown() {
   const container = document.getElementById('countdown');
-  if (!container) {
-    console.error("⚠ No se encontró el elemento #countdown");
-    return;
-  }
-
-  // 🔹 CONFIGURA TUS FECHAS AQUÍ
-  let startDate = new Date(2019, 0, 1); // Año, mes(0=enero), día que se conocieron
-  let eventMonth = 0; // Enero = 0, Febrero = 1, ...
-  let eventDay = 1;   // Día del aniversario
+  let startParam = getURLParam('start');
+  let eventParam = getURLParam('event');
+  let startDate = startParam ? new Date(startParam + 'T00:00:00') : new Date('2018-12-01T00:00:00'); 
+  let eventDate = eventParam ? new Date(eventParam + 'T00:00:00') : new Date('2025-05-25T00:00:00');
 
   function update() {
     const now = new Date();
-    let currentYear = now.getFullYear();
-    let eventDate = new Date(currentYear, eventMonth, eventDay, 0, 0, 0);
-
-    // Si el aniversario de este año ya pasó, poner el próximo
-    if (eventDate.getTime() < now.getTime()) {
-      eventDate = new Date(currentYear + 1, eventMonth, eventDay, 0, 0, 0);
-    }
-
-    // Calcular días desde que se conocieron
     let diff = now - startDate;
     let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    // Calcular tiempo restante
     let eventDiff = eventDate - now;
-    let eventDays = Math.floor(eventDiff / (1000 * 60 * 60 * 24));
-    let eventHours = Math.floor((eventDiff / (1000 * 60 * 60)) % 24);
-    let eventMinutes = Math.floor((eventDiff / (1000 * 60)) % 60);
-    let eventSeconds = Math.floor((eventDiff / 1000) % 60);
+    let eventDays = Math.max(0, Math.floor(eventDiff / (1000 * 60 * 60 * 24)));
+    let eventHours = Math.max(0, Math.floor((eventDiff / (1000 * 60 * 60)) % 24));
+    let eventMinutes = Math.max(0, Math.floor((eventDiff / (1000 * 60)) % 60));
+    let eventSeconds = Math.max(0, Math.floor((eventDiff / 1000) % 60));
 
     container.innerHTML =
-      Llevamos de conocernos "01/01/2019": <b>${days}</b> días<br> +
-      Nuestro aniversario: <b>${eventDays}d ${eventHours}h ${eventMinutes}m ${eventSeconds}s</b>;
+      `Llevamos de conocernos "01/01/2019": <b>${days}</b> días<br>` +
+      `Nuestro aniversario "01/01/2019": <b>${eventDays}d ${eventHours}h ${eventMinutes}m ${eventSeconds}s</b>`;
     container.classList.add('visible');
   }
-
   update();
   setInterval(update, 1000);
 }
 
-// Música
+// --- Música de fondo ---
 function playBackgroundMusic() {
   const audio = document.getElementById('bg-music');
   if (!audio) return;
@@ -198,9 +191,11 @@ function playBackgroundMusic() {
   }
   audio.volume = 0.7;
   audio.loop = true;
+  // Intentar reproducir inmediatamente
   audio.play().then(() => {
     btn.textContent = '🔊 Música';
   }).catch(() => {
+    // Si falla el autoplay, esperar click en el botón
     btn.textContent = '▶️ Música';
   });
   btn.onclick = () => {
@@ -214,8 +209,7 @@ function playBackgroundMusic() {
   };
 }
 
-// --- EJECUTAR AL CARGAR ---
+// Intentar reproducir la música lo antes posible (al cargar la página)
 window.addEventListener('DOMContentLoaded', () => {
   playBackgroundMusic();
-  showCountdown(); // ✅ Siempre se ejecuta
 });
